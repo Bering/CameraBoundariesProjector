@@ -2,6 +2,7 @@
 using UnityEditor;
 using System.Collections.Generic;
 
+[System.Serializable]
 public class CameraGizmos : MonoBehaviour
 {
 
@@ -153,8 +154,8 @@ public class CameraGizmos : MonoBehaviour
 
 	protected Vector3 GetPlaneIntersection (Ray r)
 	{
-		Gizmos.color = Color.blue;
-		Gizmos.DrawRay (r);
+		//Gizmos.color = Color.blue;
+		//Gizmos.DrawRay (r);
 
 		foreach (var hit in Physics.RaycastAll (r)) {
 			if (hit.collider.gameObject == this.planeToRaycastAgainst) {
