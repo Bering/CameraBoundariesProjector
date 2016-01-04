@@ -32,11 +32,12 @@ public static class GameViewUtils
 
 	static GameViewUtils ()
 	{
-		// gameViewSizesInstance  = ScriptableSingleton<GameViewSizes>.instance;
 		var sizesType = typeof(Editor).Assembly.GetType ("UnityEditor.GameViewSizes");
 		var singleType = typeof(ScriptableSingleton<>).MakeGenericType (sizesType);
 		var instanceProp = singleType.GetProperty ("instance");
 		getGroup = sizesType.GetMethod ("GetGroup");
+
+		// gameViewSizesInstance  = ScriptableSingleton<GameViewSizes>.instance;
 		gameViewSizesInstance = instanceProp.GetValue (null, null);
 	}
 
