@@ -12,10 +12,7 @@ public class CameraGizmosInspector : Editor
 
 	override public void OnInspectorGUI ()
 	{
-		serializedObject.Update ();
-
 		if (cameraGizmos == null) {
-			//	cameraGizmos = (CameraGizmos)(serializedObject.targetObject);
 			cameraGizmos = (CameraGizmos)target;
 		}
 
@@ -66,7 +63,6 @@ public class CameraGizmosInspector : Editor
 
 		EditorGUILayout.EndVertical ();
 
-		serializedObject.ApplyModifiedProperties ();
 		DrawDefaultInspector ();
 	}
 
