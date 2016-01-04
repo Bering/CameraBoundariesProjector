@@ -63,7 +63,9 @@ public class CameraGizmosInspector : Editor
 
 		EditorGUILayout.EndVertical ();
 
-		DrawDefaultInspector ();
+		if (GUI.changed) {
+			EditorUtility.SetDirty (target);
+		}
 	}
 
 }
