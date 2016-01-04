@@ -28,7 +28,7 @@ public class CameraGizmos : MonoBehaviour
 	public Dictionary<GameViewSizeGroupType,GameViewSizeEditorOptions[]> allAspects;
 	public bool[] showSections;
 
-	Camera c;
+	Camera cam;
 	Vector3 topLeft;
 	Vector3 topRight;
 	Vector3 bottomRight;
@@ -48,8 +48,8 @@ public class CameraGizmos : MonoBehaviour
 
 	protected void InitIfRequired ()
 	{
-		if (c == null) {
-			c = GetComponent<Camera> ();
+		if (cam == null) {
+			cam = GetComponent<Camera> ();
 		}
 
 		if (allAspects == null) {
@@ -105,19 +105,19 @@ public class CameraGizmos : MonoBehaviour
 				}
 
 				if (o.showFrustrum) {
-					c.aspect = (float)o.width / (float)o.height;
+					cam.aspect = (float)o.width / (float)o.height;
 					DrawFrustrum ();
 				}
 
 				if (o.showProjection && planeToRaycastAgainst != null) {
-					c.aspect = (float)o.width / (float)o.height;
+					cam.aspect = (float)o.width / (float)o.height;
 					DrawProjection ();
 				}
 			}
 
 		}
 
-		c.ResetAspect ();
+		cam.ResetAspect ();
 	}
 
 
@@ -125,8 +125,8 @@ public class CameraGizmos : MonoBehaviour
 	{
 		// DrawFrustrum is bugged, these shennanigans make it work as expected
 		Matrix4x4 temp = Gizmos.matrix;
-		Gizmos.matrix = Matrix4x4.TRS (c.transform.position, c.transform.rotation, Vector3.one);
-		Gizmos.DrawFrustum (Vector3.zero, c.fieldOfView, c.farClipPlane, c.nearClipPlane, c.aspect);
+		Gizmos.matrix = Matrix4x4.TRS (cam.transform.position, cam.transform.rotation, Vector3.one);
+		Gizmos.DrawFrustum (Vector3.zero, cam.fieldOfView, cam.farClipPlane, cam.nearClipPlane, cam.aspect);
 		Gizmos.matrix = temp;
 	}
 
@@ -135,10 +135,10 @@ public class CameraGizmos : MonoBehaviour
 	{
 		Color prevColor = Gizmos.color;
 
-		topLeft = GetPlaneIntersection (c.ViewportPointToRay (topLeftViewportPoint));
-		topRight = GetPlaneIntersection (c.ViewportPointToRay (topRightViewportPoint));
-		bottomRight = GetPlaneIntersection (c.ViewportPointToRay (bottomRightViewportPoint));
-		bottomLeft = GetPlaneIntersection (c.ViewportPointToRay (bottomLeftViewportPoint));
+		topLeft = GetPlaneIntersection (cam.ViewportPointToRay (topLeftViewportPoint));
+		topRight = GetPlaneIntersection (cam.ViewportPointToRay (topRightViewportPoint));
+		bottomRight = GetPlaneIntersection (cam.ViewportPointToRay (bottomRightViewportPoint));
+		bottomLeft = GetPlaneIntersection (cam.ViewportPointToRay (bottomLeftViewportPoint));
 
 		Gizmos.color = Color.white;
 		Gizmos.DrawLine (topLeft, topRight);
