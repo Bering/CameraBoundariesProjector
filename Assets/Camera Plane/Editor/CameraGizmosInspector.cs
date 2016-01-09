@@ -16,7 +16,7 @@ public class CameraGizmosInspector : Editor
 			cameraGizmos = (CameraGizmos)target;
 		}
 
-		CameraGizmos.GameViewSizeEditorOptions gvs = null;
+		CameraGizmos.GameViewSizeOptions gvs = null;
 		Rect pivot, pos;
 		int n, max;
 
@@ -43,14 +43,14 @@ public class CameraGizmosInspector : Editor
 
 			if (cameraGizmos.showSections [(int)group]) {
 				
-				CameraGizmos.GameViewSizeEditorOptions[] options = cameraGizmos.allAspects [(GameViewSizeGroupType)group];
+				CameraGizmos.GameViewSizeOptions[] options = cameraGizmos.allAspects [(GameViewSizeGroupType)group];
 				max = options.Length;
 
 				for (n = 0; n < max; n++) {
 					gvs = options [n];
 
 					EditorGUILayout.BeginHorizontal ();
-					EditorGUILayout.LabelField (gvs.displayText);
+					EditorGUILayout.LabelField (gvs.name);
 					gvs.showFrustrum = EditorGUILayout.Toggle (gvs.showFrustrum);
 					gvs.showProjection = EditorGUILayout.Toggle (gvs.showProjection);
 					gvs.onlyWhenSelected = EditorGUILayout.Toggle (gvs.onlyWhenSelected);

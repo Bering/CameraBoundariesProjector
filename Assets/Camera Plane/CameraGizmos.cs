@@ -7,25 +7,19 @@ public class CameraGizmos : MonoBehaviour
 {
 
 	[System.Serializable]
-	public class GameViewSizeEditorOptions : GameViewUtils.GameViewSize
+	public class GameViewSizeOptions
 	{
+		public string name;
+		public int width;
+		public int height;
 		public bool showFrustrum;
 		public bool showProjection;
 		public bool onlyWhenSelected;
-
-		public GameViewSizeEditorOptions (GameViewUtils.GameViewSize gvs)
-		{
-			this.baseText = gvs.baseText;
-			this.displayText = gvs.displayText;
-			this.sizeType = gvs.sizeType;
-			this.width = gvs.width;
-			this.height = gvs.height;
-		}
 	}
 
 
 	public GameObject planeToRaycastAgainst;
-	public Dictionary<GameViewSizeGroupType,GameViewSizeEditorOptions[]> allAspects;
+	public Dictionary<GameViewSizeGroupType,GameViewSizeOptions[]> allAspects;
 	public bool[] showSections;
 
 	Camera cam;
@@ -61,15 +55,24 @@ public class CameraGizmos : MonoBehaviour
 
 	protected void BuildDictionaryOfGameViewSizes ()
 	{
-		allAspects = new Dictionary<GameViewSizeGroupType, GameViewSizeEditorOptions[]> ();
+		allAspects = new Dictionary<GameViewSizeGroupType, GameViewSizeOptions[]> ();
 
 		foreach (GameViewSizeGroupType t in System.Enum.GetValues (typeof(GameViewSizeGroupType))) {
 			GameViewUtils.GameViewSize[] sizes = GameViewUtils.GetGroupSizes (t);
 			int count = sizes.Length;
 
-			GameViewSizeEditorOptions[] options = new GameViewSizeEditorOptions [count];
+			GameViewSizeOptions[] options = new GameViewSizeOptions [count];
+			GameViewSizeOptions option = null;
+
 			for (int n = 0; n < count; n++) {
-				options [n] = new GameViewSizeEditorOptions (sizes [n]);
+				option = new GameViewSizeOptions ();
+
+				option.name = sizes [n].displayText;
+				option.width = sizes [n].width;
+				option.height = sizes [n].height;
+
+				options [n] = option;
+
 			}
 
 			allAspects.Add (t, options);
@@ -94,11 +97,11 @@ public class CameraGizmos : MonoBehaviour
 	protected void DrawAllGizmos (bool currentlySelected)
 	{
 		foreach (GameViewSizeGroupType t in System.Enum.GetValues (typeof(GameViewSizeGroupType))) {
-			GameViewSizeEditorOptions[] options = allAspects [t];
+			GameViewSizeOptions[] options = allAspects [t];
 			int count = options.Length;
 
 			for (int n = 0; n < count; n++) {
-				GameViewSizeEditorOptions o = options [n];
+				GameViewSizeOptions o = options [n];
 
 				if (o.onlyWhenSelected && !currentlySelected) {
 					continue;
