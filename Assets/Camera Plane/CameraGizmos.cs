@@ -165,8 +165,8 @@ public class CameraGizmos : MonoBehaviour
 				return hit.point;
 			}
 		}
-
-		return Vector3.zero;
+			
+		return cam.transform.position;
 	}
 
 }
