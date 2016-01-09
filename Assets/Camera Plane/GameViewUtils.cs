@@ -13,7 +13,6 @@ public static class GameViewUtils
 	static object gameViewSizesInstance;
 	static MethodInfo getGroup;
 
-
 	public enum GameViewSizeType
 	{
 		AspectRatio,
@@ -34,10 +33,10 @@ public static class GameViewUtils
 	{
 		var sizesType = typeof(Editor).Assembly.GetType ("UnityEditor.GameViewSizes");
 		var singleType = typeof(ScriptableSingleton<>).MakeGenericType (sizesType);
-		var instanceProp = singleType.GetProperty ("instance");
 		getGroup = sizesType.GetMethod ("GetGroup");
 
 		// gameViewSizesInstance  = ScriptableSingleton<GameViewSizes>.instance;
+		var instanceProp = singleType.GetProperty ("instance");
 		gameViewSizesInstance = instanceProp.GetValue (null, null);
 	}
 
@@ -60,6 +59,7 @@ public static class GameViewUtils
 		var group = GetGroup (sizeGroupType);
 
 		var groupType = group.GetType ();
+
 		var getTotalCount = groupType.GetMethod ("GetTotalCount");
 		int count = (int)getTotalCount.Invoke (group, null);
 
@@ -80,6 +80,7 @@ public static class GameViewUtils
 		for (int i = 0; i < count; i++) {
 			indexValue [0] = i;
 			var gvsTypeInstance = getGameViewSize.Invoke (group, indexValue);
+
 			gvs = new GameViewSize ();
 
 			gvs.sizeType = (GameViewSizeType)gameViewSizeTypeProp.GetValue (gvsTypeInstance, null);
