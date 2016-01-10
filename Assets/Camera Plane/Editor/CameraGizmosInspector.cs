@@ -7,7 +7,8 @@ using System.Collections.Generic;
 public class CameraGizmosInspector : Editor
 {
 	
-	CameraGizmos cameraGizmos = null;
+	[SerializeField]
+	CameraGizmos cameraGizmos;
 
 
 	override public void OnInspectorGUI ()
@@ -16,10 +17,7 @@ public class CameraGizmosInspector : Editor
 			cameraGizmos = (CameraGizmos)target;
 		}
 
-		CameraGizmos.GameViewSizeOptions gvs = null;
-		Rect pivot, pos;
-		int n, max;
-
+		//Rect pivot, pos;
 		EditorGUILayout.BeginVertical ();
 		EditorGUILayout.ObjectField (cameraGizmos.planeToRaycastAgainst, typeof(GameObject), true);
 
@@ -42,11 +40,13 @@ public class CameraGizmosInspector : Editor
 			EditorGUIUtility.RotateAroundPivot (90, new Vector2 (pivot.x, pivot.y));
 
 			if (cameraGizmos.unfoldSections [(int)thisGroup]) {
-				CameraGizmos.GameViewSizeOptions[] options = cameraGizmos.allAspects [(GameViewSizeGroupType)thisGroup];
-				max = options.Length;
+				
+				foreach (CameraGizmos.GameViewSizeOptions gvs in cameraGizmos.allAspects) {
 
-				for (n = 0; n < max; n++) {
-					gvs = options [n];
+					// I know, I know, I should use a Dictionary instead of a List for that but Unity doesn't serialize Dictionaries and it's a huge pain to work around
+					if (gvs.type != thisGroup) {
+						continue;
+					}
 
 					EditorGUILayout.BeginHorizontal ();
 					EditorGUILayout.LabelField (gvs.name);
