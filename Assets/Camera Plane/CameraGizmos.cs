@@ -21,7 +21,7 @@ public class CameraGizmos : MonoBehaviour
 
 	public GameObject planeToRaycastAgainst;
 	public List<GameViewSizeOptions> allAspects;
-	public bool[] showSections;
+	public bool[] unfoldSections;
 
 	[SerializeField]
 	Camera cam;
@@ -40,7 +40,7 @@ public class CameraGizmos : MonoBehaviour
 	void Reset ()
 	{
 		this.BuildListOfGameViewSizes ();
-		this.showSections = new bool[this.allAspects.Count];
+		this.unfoldSections = new bool[this.allAspects.Count];
 		this.cam = GetComponent<Camera> ();
 	}
 

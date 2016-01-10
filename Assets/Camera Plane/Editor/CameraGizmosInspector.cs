@@ -23,9 +23,9 @@ public class CameraGizmosInspector : Editor
 		EditorGUILayout.BeginVertical ();
 		EditorGUILayout.ObjectField (cameraGizmos.planeToRaycastAgainst, typeof(GameObject), true);
 
-		foreach (GameViewSizeGroupType group in System.Enum.GetValues (typeof(GameViewSizeGroupType))) {
+		foreach (GameViewSizeGroupType thisGroup in System.Enum.GetValues (typeof(GameViewSizeGroupType))) {
 
-			cameraGizmos.showSections [(int)group] = EditorGUILayout.Foldout (cameraGizmos.showSections [(int)group], System.Enum.GetName (typeof(GameViewSizeGroupType), group));
+			cameraGizmos.unfoldSections [(int)thisGroup] = EditorGUILayout.Foldout (cameraGizmos.unfoldSections [(int)thisGroup], System.Enum.GetName (typeof(GameViewSizeGroupType), thisGroup));
 
 			pivot = EditorGUILayout.GetControlRect ();
 			EditorGUIUtility.RotateAroundPivot (-90, new Vector2 (pivot.x, pivot.y));
@@ -41,9 +41,8 @@ public class CameraGizmosInspector : Editor
 
 			EditorGUIUtility.RotateAroundPivot (90, new Vector2 (pivot.x, pivot.y));
 
-			if (cameraGizmos.showSections [(int)group]) {
-				
-				CameraGizmos.GameViewSizeOptions[] options = cameraGizmos.allAspects [(GameViewSizeGroupType)group];
+			if (cameraGizmos.unfoldSections [(int)thisGroup]) {
+				CameraGizmos.GameViewSizeOptions[] options = cameraGizmos.allAspects [(GameViewSizeGroupType)thisGroup];
 				max = options.Length;
 
 				for (n = 0; n < max; n++) {
