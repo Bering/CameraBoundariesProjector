@@ -3,6 +3,8 @@ using UnityEditor;
 
 
 /**
+ * All of this because GameViewSize is not accessible without reflexion
+ * 
  * Inspired by http://answers.unity3d.com/questions/956123/add-and-select-game-view-resolution.html
  * from vexe http://answers.unity3d.com/users/146979/vexe.html
  * */
