@@ -9,6 +9,7 @@ public class CameraGizmos : MonoBehaviour
 	[System.Serializable]
 	public class GameViewSizeOptions
 	{
+		public GameViewSizeGroupType type;
 		public string name;
 		public int width;
 		public int height;
@@ -19,10 +20,12 @@ public class CameraGizmos : MonoBehaviour
 
 
 	public GameObject planeToRaycastAgainst;
-	public Dictionary<GameViewSizeGroupType,GameViewSizeOptions[]> allAspects;
+	public List<GameViewSizeOptions> allAspects;
 	public bool[] showSections;
 
+	[SerializeField]
 	Camera cam;
+
 	Vector3 topLeft;
 	Vector3 topRight;
 	Vector3 bottomRight;
@@ -34,88 +37,69 @@ public class CameraGizmos : MonoBehaviour
 	Vector3 bottomLeftViewportPoint = new Vector3 (0, 0);
 
 
-	void Awake ()
+	void Reset ()
 	{
-		InitIfRequired ();
+		this.BuildListOfGameViewSizes ();
+		this.showSections = new bool[this.allAspects.Count];
+		this.cam = GetComponent<Camera> ();
 	}
 
 
-	protected void InitIfRequired ()
+	protected void BuildListOfGameViewSizes ()
 	{
-		if (cam == null) {
-			cam = GetComponent<Camera> ();
-		}
+		this.allAspects = new List<GameViewSizeOptions> ();
+		GameViewSizeOptions option = null;
 
-		if (allAspects == null) {
-			this.BuildDictionaryOfGameViewSizes ();
-			showSections = new bool[allAspects.Count];
-		}
-	}
+		foreach (GameViewSizeGroupType thisGroup in System.Enum.GetValues (typeof(GameViewSizeGroupType))) {
+			foreach (GameViewUtils.GameViewSize thisSize in GameViewUtils.GetGroupSizes (thisGroup)) {
 
-
-	protected void BuildDictionaryOfGameViewSizes ()
-	{
-		allAspects = new Dictionary<GameViewSizeGroupType, GameViewSizeOptions[]> ();
-
-		foreach (GameViewSizeGroupType t in System.Enum.GetValues (typeof(GameViewSizeGroupType))) {
-			GameViewUtils.GameViewSize[] sizes = GameViewUtils.GetGroupSizes (t);
-			int count = sizes.Length;
-
-			GameViewSizeOptions[] options = new GameViewSizeOptions [count];
-			GameViewSizeOptions option = null;
-
-			for (int n = 0; n < count; n++) {
 				option = new GameViewSizeOptions ();
 
-				option.name = sizes [n].displayText;
-				option.width = sizes [n].width;
-				option.height = sizes [n].height;
+				option.type = thisGroup;
+				option.name = thisSize.displayText;
+				option.width = thisSize.width;
+				option.height = thisSize.height;
 
-				options [n] = option;
-
+				this.allAspects.Add (option);
 			}
-
-			allAspects.Add (t, options);
 		}
+
 	}
 
 
 	void OnDrawGizmos ()
 	{
-		InitIfRequired ();
 		DrawAllGizmos (false);
 	}
 
 
 	void OnDrawGizmosSelected ()
 	{
-		InitIfRequired ();
 		DrawAllGizmos (true);
 	}
 
 
 	protected void DrawAllGizmos (bool currentlySelected)
 	{
-		foreach (GameViewSizeGroupType t in System.Enum.GetValues (typeof(GameViewSizeGroupType))) {
-			GameViewSizeOptions[] options = allAspects [t];
-			int count = options.Length;
+		foreach (GameViewSizeOptions o in this.allAspects) {
+			
+			if (o.onlyWhenSelected && !currentlySelected) {
+				continue;
+			}
 
-			for (int n = 0; n < count; n++) {
-				GameViewSizeOptions o = options [n];
+			if (o.showFrustrum) {
+				this.cam.aspect = (float)o.width / (float)o.height;
+				this.DrawFrustrum ();
+			}
 
-				if (o.onlyWhenSelected && !currentlySelected) {
-					continue;
-				}
+			if (o.showProjection && this.planeToRaycastAgainst != null) {
 
 				if (o.showFrustrum) {
 					cam.aspect = (float)o.width / (float)o.height;
 					DrawFrustrum ();
 				}
 
-				if (o.showProjection && planeToRaycastAgainst != null) {
-					cam.aspect = (float)o.width / (float)o.height;
-					DrawProjection ();
-				}
+				this.DrawProjection ();
 			}
 
 		}

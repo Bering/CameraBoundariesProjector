@@ -1,4 +1,4 @@
 <ListOfTask>
-  <Task file="" description="Make it save between play and editor" />
+  <Task file="" description="Make it save between play and editor" completed="True" />
   <Task file="" description="Make it update as soon as the user clicks a box" completed="True" />
 </ListOfTask>
