@@ -106,7 +106,7 @@ public class CameraGizmos : MonoBehaviour
 
 		}
 
-		cam.ResetAspect ();
+		this.cam.ResetAspect ();
 	}
 
 
@@ -114,8 +114,8 @@ public class CameraGizmos : MonoBehaviour
 	{
 		// DrawFrustrum is bugged, these shennanigans make it work as expected
 		Matrix4x4 temp = Gizmos.matrix;
-		Gizmos.matrix = Matrix4x4.TRS (cam.transform.position, cam.transform.rotation, Vector3.one);
-		Gizmos.DrawFrustum (Vector3.zero, cam.fieldOfView, cam.farClipPlane, cam.nearClipPlane, cam.aspect);
+		Gizmos.matrix = Matrix4x4.TRS (this.cam.transform.position, this.cam.transform.rotation, Vector3.one);
+		Gizmos.DrawFrustum (Vector3.zero, this.cam.fieldOfView, this.cam.farClipPlane, this.cam.nearClipPlane, this.cam.aspect);
 		Gizmos.matrix = temp;
 	}
 
@@ -124,18 +124,18 @@ public class CameraGizmos : MonoBehaviour
 	{
 		Color prevColor = Gizmos.color;
 
-		topLeft = GetPlaneIntersection (cam.ViewportPointToRay (topLeftViewportPoint));
-		topRight = GetPlaneIntersection (cam.ViewportPointToRay (topRightViewportPoint));
-		bottomRight = GetPlaneIntersection (cam.ViewportPointToRay (bottomRightViewportPoint));
-		bottomLeft = GetPlaneIntersection (cam.ViewportPointToRay (bottomLeftViewportPoint));
+		this.topLeft = GetPlaneIntersection (this.cam.ViewportPointToRay (this.topLeftViewportPoint));
+		this.topRight = GetPlaneIntersection (this.cam.ViewportPointToRay (this.topRightViewportPoint));
+		this.bottomRight = GetPlaneIntersection (this.cam.ViewportPointToRay (this.bottomRightViewportPoint));
+		this.bottomLeft = GetPlaneIntersection (this.cam.ViewportPointToRay (this.bottomLeftViewportPoint));
 
 		Gizmos.color = Color.white;
-		Gizmos.DrawLine (topLeft, topRight);
-		Gizmos.DrawLine (topRight, bottomRight);
+		Gizmos.DrawLine (this.topLeft, this.topRight);
+		Gizmos.DrawLine (this.topRight, this.bottomRight);
 		Gizmos.color = Color.red;
-		Gizmos.DrawLine (bottomRight, bottomLeft);
+		Gizmos.DrawLine (this.bottomRight, this.bottomLeft);
 		Gizmos.color = Color.green;
-		Gizmos.DrawLine (bottomLeft, topLeft);
+		Gizmos.DrawLine (this.bottomLeft, this.topLeft);
 
 		Gizmos.color = prevColor;
 	}
@@ -143,16 +143,13 @@ public class CameraGizmos : MonoBehaviour
 
 	protected Vector3 GetPlaneIntersection (Ray r)
 	{
-		//Gizmos.color = Color.blue;
-		//Gizmos.DrawRay (r);
-
 		foreach (var hit in Physics.RaycastAll (r)) {
 			if (hit.collider.gameObject == this.planeToRaycastAgainst) {
 				return hit.point;
 			}
 		}
 			
-		return cam.transform.position;
+		return this.cam.transform.position;
 	}
 
 }
