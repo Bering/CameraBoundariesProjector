@@ -14,7 +14,7 @@ public class CameraGizmos : MonoBehaviour
 		public int width;
 		public int height;
 		public bool showFrustrum;
-		public bool showProjection;
+		public bool showBounds;
 		public bool onlyWhenSelected;
 	}
 
@@ -93,7 +93,7 @@ public class CameraGizmos : MonoBehaviour
 				this.DrawFrustrum ();
 			}
 
-			if (o.showProjection && this.planeToRaycastAgainst != null) {
+			if (o.showBounds && this.planeToRaycastAgainst != null) {
 
 				// special "Free Aspect" option has height = 0. So use the current aspect instead
 				if (o.height == 0) {
@@ -102,7 +102,7 @@ public class CameraGizmos : MonoBehaviour
 					this.cam.aspect = (float)o.width / (float)o.height;
 				}
 
-				this.DrawProjection ();
+				this.DrawBounds ();
 			}
 
 		}
@@ -121,7 +121,7 @@ public class CameraGizmos : MonoBehaviour
 	}
 
 
-	protected void DrawProjection ()
+	protected void DrawBounds ()
 	{
 		Color prevColor = Gizmos.color;
 

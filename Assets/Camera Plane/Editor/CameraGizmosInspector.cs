@@ -34,7 +34,7 @@ public class CameraGizmosInspector : Editor
 			pos.x -= 10f;
 			EditorGUI.LabelField (pos, "Frustrum");
 			pos.y += 23f;
-			EditorGUI.LabelField (pos, "Projection");
+			EditorGUI.LabelField (pos, "Bounds");
 			pos.y += 23f;
 			EditorGUI.LabelField (pos, "Selected");
 
@@ -53,7 +53,7 @@ public class CameraGizmosInspector : Editor
 					EditorGUILayout.BeginHorizontal ();
 					EditorGUILayout.LabelField (gvs.name);
 					gvs.showFrustrum = EditorGUILayout.Toggle (gvs.showFrustrum);
-					gvs.showProjection = EditorGUILayout.Toggle (gvs.showProjection);
+					gvs.showBounds = EditorGUILayout.Toggle (gvs.showBounds);
 					gvs.onlyWhenSelected = EditorGUILayout.Toggle (gvs.onlyWhenSelected);
 					EditorGUILayout.EndHorizontal ();
 				}
