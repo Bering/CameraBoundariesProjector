@@ -1,4 +1,6 @@
 <ListOfTask>
   <Task file="" description="Make it save between play and editor" completed="True" />
   <Task file="" description="Make it update as soon as the user clicks a box" completed="True" />
+  <Task file="" description="Show sizes, not just aspect ratios" />
+  <Task file="" description="Find a way to show a header for thee checkboxes" />
 </ListOfTask>
