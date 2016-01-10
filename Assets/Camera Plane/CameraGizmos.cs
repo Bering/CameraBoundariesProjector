@@ -94,9 +94,11 @@ public class CameraGizmos : MonoBehaviour
 
 			if (o.showProjection && this.planeToRaycastAgainst != null) {
 
-				if (o.showFrustrum) {
-					cam.aspect = (float)o.width / (float)o.height;
-					DrawFrustrum ();
+				// special "Free Aspect" option has height = 0. So use the current aspect instead
+				if (o.height == 0) {
+					this.cam.ResetAspect ();
+				} else {
+					this.cam.aspect = (float)o.width / (float)o.height;
 				}
 
 				this.DrawProjection ();
