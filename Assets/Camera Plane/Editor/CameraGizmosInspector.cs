@@ -25,6 +25,7 @@ public class CameraGizmosInspector : Editor
 
 			cameraGizmos.unfoldSections [(int)thisGroup] = EditorGUILayout.Foldout (cameraGizmos.unfoldSections [(int)thisGroup], System.Enum.GetName (typeof(GameViewSizeGroupType), thisGroup));
 
+			/*
 			pivot = EditorGUILayout.GetControlRect ();
 			EditorGUIUtility.RotateAroundPivot (-90, new Vector2 (pivot.x, pivot.y));
 
@@ -38,6 +39,7 @@ public class CameraGizmosInspector : Editor
 			EditorGUI.LabelField (pos, "Selected");
 
 			EditorGUIUtility.RotateAroundPivot (90, new Vector2 (pivot.x, pivot.y));
+			*/
 
 			if (cameraGizmos.unfoldSections [(int)thisGroup]) {
 				
