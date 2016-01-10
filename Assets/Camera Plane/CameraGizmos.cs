@@ -45,6 +45,7 @@ public class CameraGizmos : MonoBehaviour
 	}
 
 
+	[ContextMenu ("Refresh list of aspect ratios")]
 	protected void BuildListOfGameViewSizes ()
 	{
 		this.allAspects = new List<GameViewSizeOptions> ();
