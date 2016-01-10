@@ -40,7 +40,7 @@ public class CameraGizmos : MonoBehaviour
 	void Reset ()
 	{
 		this.BuildListOfGameViewSizes ();
-		this.unfoldSections = new bool[this.allAspects.Count];
+		this.unfoldSections = new bool[System.Enum.GetValues (typeof(GameViewSizeGroupType)).Length];
 		this.cam = GetComponent<Camera> ();
 	}
 
