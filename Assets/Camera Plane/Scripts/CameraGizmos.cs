@@ -144,13 +144,16 @@ public class CameraGizmos : MonoBehaviour
 
 	protected Vector3 GetPlaneIntersection (Ray r)
 	{
+		RaycastHit closestHit = new RaycastHit();
+		closestHit.distance = float.PositiveInfinity;
+		closestHit.point = this.cam.transform.position;
 		foreach (var hit in Physics.RaycastAll (r)) {
-			if (hit.collider.gameObject == this.planeToRaycastAgainst) {
-				return hit.point;
+			
+			if (hit.distance < closestHit.distance) {
 			}
 		}
-			
-		return this.cam.transform.position;
+
+		return closestHit.point;
 	}
 
 }
