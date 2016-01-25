@@ -83,7 +83,7 @@ public class CameraGizmos : MonoBehaviour
 	protected void DrawAllGizmos (bool currentlySelected)
 	{
 		foreach (GameViewSizeOptions o in this.allAspects) {
-			
+
 			if (o.onlyWhenSelected && !currentlySelected) {
 				continue;
 			}
@@ -93,15 +93,8 @@ public class CameraGizmos : MonoBehaviour
 				this.DrawFrustrum ();
 			}
 
-			if (o.showBounds && this.planeToRaycastAgainst != null) {
-
-				// special "Free Aspect" option has height = 0. So use the current aspect instead
-				if (o.height == 0) {
-					this.cam.ResetAspect ();
-				} else {
-					this.cam.aspect = (float)o.width / (float)o.height;
-				}
-
+			if (o.showBounds) {
+				this.cam.aspect = (float)o.width / (float)o.height;
 				this.DrawBounds ();
 			}
 
@@ -147,10 +140,13 @@ public class CameraGizmos : MonoBehaviour
 		RaycastHit closestHit = new RaycastHit();
 		closestHit.distance = float.PositiveInfinity;
 		closestHit.point = this.cam.transform.position;
+
 		foreach (var hit in Physics.RaycastAll (r)) {
 			
 			if (hit.distance < closestHit.distance) {
+				closestHit = hit;
 			}
+
 		}
 
 		return closestHit.point;
