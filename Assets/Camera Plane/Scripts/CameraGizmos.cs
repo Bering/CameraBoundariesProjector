@@ -120,7 +120,7 @@ public class CameraGizmos : MonoBehaviour
 			this.cam = GetComponent<Camera> ();
 		}
 
-		if  (!this.cam.gameObject.activeSelf || !this.cam.isActiveAndEnabled) {
+		if  (!this.cam.gameObject.activeSelf || !this.cam.isActiveAndEnabled || this.height < 1) {
 			return;
 		}
 
