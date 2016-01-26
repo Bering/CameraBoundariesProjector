@@ -6,3 +6,8 @@ Major redesign!
 - Draw a tiny cube for each projected point.
 - Projection quality: project any number of points, not just the corners of the field of view. Between 9 and 99 recommended.
 - Draw Rays: You can draw a ray from each projected point towards the next. Nice for when there are more than one script on the same camera, i.e.: One with lines, one with rays.
+- Added a few scenes to showcase the features
+- You can now choose the color of the lines
+
+1.0
+- Initial release
