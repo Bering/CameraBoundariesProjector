@@ -1,70 +1,100 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using UnityEngine.Assertions;
 
 [System.Serializable]
+[RequireComponent(typeof(Camera))]
 public class CameraGizmos : MonoBehaviour
 {
+	public string displayText;
+	public int width;
+	public int height;
 
-	[System.Serializable]
-	public class GameViewSizeOptions
-	{
-		public GameViewSizeGroupType type;
-		public string name;
-		public int width;
-		public int height;
-		public bool showFrustrum;
-		public bool showBounds;
-		public bool onlyWhenSelected;
-	}
+	[Tooltip("How many points to project along each borders. Between 9 and 99 recommended.")]
+	public int projectionQuality;
+	public bool drawPoints;
+	public bool drawRays;
+	public bool drawLines;
+	public bool drawFrustrum;
+	public bool onlyWhenSelected;
+	public Color customColor;
 
-
-	public GameObject planeToRaycastAgainst;
-	public List<GameViewSizeOptions> allAspects;
-	public bool[] unfoldSections;
-
-	[SerializeField]
-	Camera cam;
-
-	Vector3 topLeft;
-	Vector3 topRight;
-	Vector3 bottomRight;
-	Vector3 bottomLeft;
-
-	Vector3 topLeftViewportPoint = new Vector3 (0, 1);
-	Vector3 topRightViewportPoint = new Vector3 (1, 1);
-	Vector3 bottomRightViewportPoint = new Vector3 (1, 0);
-	Vector3 bottomLeftViewportPoint = new Vector3 (0, 0);
+	protected Camera cam;
+	protected Vector3[] projectedPoints;
 
 
 	void Reset ()
 	{
-		this.BuildListOfGameViewSizes ();
-		this.unfoldSections = new bool[System.Enum.GetValues (typeof(GameViewSizeGroupType)).Length];
-		this.cam = GetComponent<Camera> ();
+		this.displayText = "Camera Gizmos (16:9)";
+		this.width = 16;
+		this.height = 9;
+		this.projectionQuality = 9;
+		this.drawPoints = true;
+		this.drawRays = false;
+		this.drawLines = true;
+		this.drawFrustrum = true;
+		this.onlyWhenSelected = false;
+		this.customColor = Color.white;
 	}
 
 
-	[ContextMenu ("Refresh list of aspect ratios")]
-	protected void BuildListOfGameViewSizes ()
+	protected Vector3[] computeViewpointPoints(int definition)
 	{
-		this.allAspects = new List<GameViewSizeOptions> ();
-		GameViewSizeOptions option = null;
+		int n = 0;
+		Vector3 p = Vector3.zero;
+		Vector3[] points = new Vector3[definition * 4];
 
-		foreach (GameViewSizeGroupType thisGroup in System.Enum.GetValues (typeof(GameViewSizeGroupType))) {
-			foreach (GameViewUtils.GameViewSize thisSize in GameViewUtils.GetGroupSizes (thisGroup)) {
-
-				option = new GameViewSizeOptions ();
-
-				option.type = thisGroup;
-				option.name = thisSize.displayText;
-				option.width = thisSize.width;
-				option.height = thisSize.height;
-
-				this.allAspects.Add (option);
-			}
+		if (definition < 1) {
+			return points;
 		}
 
+		float step = 1f / definition;
+
+		for(n = 0; n < definition; n++) {
+			
+			// Top
+			p.x = n * step;
+			p.y = 1;
+			points[n] = projectPoint (this.cam.ViewportPointToRay(p));
+
+			// Right
+			p.x = 1;
+			p.y = 1 - (n * step);
+			points[definition + n] = projectPoint (this.cam.ViewportPointToRay(p));
+
+			// Bottom
+			p.x = 1 - (n * step);
+			p.y = 0;
+			points[(definition*2) + n] = projectPoint (this.cam.ViewportPointToRay(p));
+
+			// Left
+			p.x = 0;
+			p.y = n * step;
+			points[(definition*3) + n] = projectPoint (this.cam.ViewportPointToRay(p));
+
+
+		}
+
+		return points;
+	}
+
+
+	protected Vector3 projectPoint (Ray r)
+	{
+		RaycastHit closestHit = new RaycastHit();
+		closestHit.distance = float.PositiveInfinity;
+		closestHit.point = this.cam.transform.position;
+
+		foreach (var hit in Physics.RaycastAll (r)) {
+
+			if (hit.distance < closestHit.distance) {
+				closestHit = hit;
+			}
+
+		}
+
+		return closestHit.point;
 	}
 
 
@@ -82,30 +112,31 @@ public class CameraGizmos : MonoBehaviour
 
 	protected void DrawAllGizmos (bool currentlySelected)
 	{
-		foreach (GameViewSizeOptions o in this.allAspects) {
-			
-			if (o.onlyWhenSelected && !currentlySelected) {
-				continue;
-			}
-
-			if (o.showFrustrum) {
-				this.cam.aspect = (float)o.width / (float)o.height;
-				this.DrawFrustrum ();
-			}
-
-			if (o.showBounds && this.planeToRaycastAgainst != null) {
-
-				// special "Free Aspect" option has height = 0. So use the current aspect instead
-				if (o.height == 0) {
-					this.cam.ResetAspect ();
-				} else {
-					this.cam.aspect = (float)o.width / (float)o.height;
-				}
-
-				this.DrawBounds ();
-			}
-
+		if (this.onlyWhenSelected && !currentlySelected) {
+			return;
 		}
+
+		if (!this.cam) {
+			this.cam = GetComponent<Camera> ();
+		}
+
+		if  (!this.cam.gameObject.activeSelf || !this.cam.isActiveAndEnabled || this.height < 1) {
+			return;
+		}
+
+		if (this.cam.aspect != (float)width / (float)height) {
+			this.cam.aspect = (float)width / (float)height;
+		}
+
+		if (this.drawFrustrum) {
+			this.DrawFrustrum ();
+		}
+
+		if (currentlySelected || projectedPoints == null || projectedPoints.Length != (projectionQuality*4)) {
+			projectedPoints = computeViewpointPoints (projectionQuality);
+		}
+
+		this.DrawProjection ();
 
 		this.cam.ResetAspect ();
 	}
@@ -121,36 +152,58 @@ public class CameraGizmos : MonoBehaviour
 	}
 
 
-	protected void DrawBounds ()
+	protected void DrawProjection ()
 	{
+		int currentPoint, nextPoint, lastPoint = Mathf.CeilToInt(this.projectionQuality * 4) - 1;
 		Color prevColor = Gizmos.color;
+		Ray r = new Ray();
 
-		this.topLeft = GetPlaneIntersection (this.cam.ViewportPointToRay (this.topLeftViewportPoint));
-		this.topRight = GetPlaneIntersection (this.cam.ViewportPointToRay (this.topRightViewportPoint));
-		this.bottomRight = GetPlaneIntersection (this.cam.ViewportPointToRay (this.bottomRightViewportPoint));
-		this.bottomLeft = GetPlaneIntersection (this.cam.ViewportPointToRay (this.bottomLeftViewportPoint));
+		for (currentPoint = 0; currentPoint <= lastPoint; currentPoint++) {
 
-		Gizmos.color = Color.white;
-		Gizmos.DrawLine (this.topLeft, this.topRight);
-		Gizmos.DrawLine (this.topRight, this.bottomRight);
-		Gizmos.color = Color.red;
-		Gizmos.DrawLine (this.bottomRight, this.bottomLeft);
-		Gizmos.color = Color.green;
-		Gizmos.DrawLine (this.bottomLeft, this.topLeft);
+			if (this.projectedPoints[currentPoint] == cam.transform.position) {
+				continue;
+			}
+
+			Gizmos.color = GetColorForPoint(currentPoint);
+
+			if (this.drawPoints) {
+				Gizmos.DrawCube (this.projectedPoints[currentPoint], Vector3.one * 0.05f);
+			}
+
+			nextPoint = (currentPoint == lastPoint) ? 0 : currentPoint + 1;
+
+			if (this.projectedPoints[nextPoint] == cam.transform.position) {
+				continue;
+			}
+
+			if (this.drawRays) {
+				r.origin = this.projectedPoints[currentPoint];
+				r.direction = this.projectedPoints[nextPoint] - r.origin;
+				Gizmos.DrawRay (r);
+			}
+
+			if (this.drawLines) {
+				Gizmos.DrawLine (this.projectedPoints[currentPoint], this.projectedPoints[nextPoint]);
+			}
+
+		}
 
 		Gizmos.color = prevColor;
 	}
 
 
-	protected Vector3 GetPlaneIntersection (Ray r)
+	protected Color GetColorForPoint(int pointIndex)
 	{
-		foreach (var hit in Physics.RaycastAll (r)) {
-			if (hit.collider.gameObject == this.planeToRaycastAgainst) {
-				return hit.point;
-			}
+		if (pointIndex < (projectionQuality*2)) {
+			return this.customColor;
 		}
-			
-		return this.cam.transform.position;
+
+		if (pointIndex < (projectionQuality*3)) {
+			return Color.red;
+		}
+
+		return Color.green;
 	}
+
 
 }
