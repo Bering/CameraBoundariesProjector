@@ -1,20 +1,17 @@
 # Camera-Plane
-Unity Editor Extension that adds gizmos to cameras
+Script that adds gizmos to cameras in Unity
 
-You know that resolution dropdown in the game view? The one with all the handy dandy resolutions of iPads, Android tablets, PS3 and X-Box? Wouldn't it be useful to show the camera's frustrum to all those settings without switching platform in the build window?
+##Overview
+This script projects the boundaries of the FOV of a camera and shows gizmos so you can see what is visible and what isn't. You can put many scripts on the same camera, each with a different aspect ratio so it is great for seeing what phones, tablets and different PC screen sizes will see.
 
-![GameViewSizes dropdown](https://raw.githubusercontent.com/Bering/Camera-Plane/master/Screenshots/GameViewSize%20Dropdown.png)
-
-Features
-========
-
-Show the frustrum of the resolutions shown in the game view
-![Show Frustrum](https://raw.githubusercontent.com/Bering/Camera-Plane/master/Screenshots/show%20frustrum.png)
+##Features
+Show the frustrum and see where it intersect on your colliders
+![Simple Projection](Screenshots/1-%20Simple%20Projection.png)
 
 
-Project the camera's field of view on a surface and show the boundaries
-![Show Boundaries](https://raw.githubusercontent.com/Bering/Camera-Plane/master/Screenshots/show%20bounds.png)
+Put many scripts on the same camera to give you a great idea of what all the different player resolutions will see
+![Many ratios](Screenshots/2-%20Many%20Ratios.png)
 
 
-Show that for more than one resolution at the same time
-![Mixed settings](https://raw.githubusercontent.com/Bering/Camera-Plane/master/Screenshots/mix.png)
+The projection works with all colliders
+![Complex Borders](Screenshots/3-%20Draw%20Complex%20Borders.png)
