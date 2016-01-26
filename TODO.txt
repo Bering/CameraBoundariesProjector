@@ -1,0 +1,11 @@
+TODO:
+- Changer le nom, ça n'a plus rapport pantoute LOL
+- Editer les screenshots et/ou le readme pour pointer et expliquer les features et avantages, question d'être vraiment explicite.
+  * Démontrer que les trous dans la projection ça veut dire que tu vois le background de la caméra
+  * Démontrer que rouge c'est l'axe des X et que vert c'est l'axe des Y
+  * Démontrer la projection quality
+  * Démontrer le OnlyWhenSelected
+  * etc...
+- Créer un readme.pdf de quelques lignes avec le lien vers GitHub et les instructions pour l'utilisation.
+- Publier le readme.pdf dans le bundle lui-même
+- Publier tout ça sur le assets store
