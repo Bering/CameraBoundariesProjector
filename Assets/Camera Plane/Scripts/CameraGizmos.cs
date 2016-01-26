@@ -18,6 +18,7 @@ public class CameraGizmos : MonoBehaviour
 	public bool drawLines;
 	public bool drawFrustrum;
 	public bool onlyWhenSelected;
+	public Color customColor;
 
 	protected Camera cam;
 	protected Vector3[] projectedPoints;
@@ -34,6 +35,7 @@ public class CameraGizmos : MonoBehaviour
 		this.drawLines = true;
 		this.drawFrustrum = true;
 		this.onlyWhenSelected = false;
+		this.customColor = Color.white;
 	}
 
 
@@ -193,7 +195,7 @@ public class CameraGizmos : MonoBehaviour
 	protected Color GetColorForPoint(int pointIndex)
 	{
 		if (pointIndex < (projectionQuality*2)) {
-			return Color.white;
+			return this.customColor;
 		}
 
 		if (pointIndex < (projectionQuality*3)) {
