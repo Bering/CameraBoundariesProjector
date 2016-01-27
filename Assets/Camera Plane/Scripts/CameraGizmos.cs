@@ -3,6 +3,7 @@ using UnityEditor;
 using System.Collections.Generic;
 using UnityEngine.Assertions;
 
+[ExecuteInEditMode]
 [System.Serializable]
 [RequireComponent(typeof(Camera))]
 public class CameraGizmos : MonoBehaviour
@@ -110,9 +111,11 @@ public class CameraGizmos : MonoBehaviour
 	}
 
 
-	protected void DrawAllGizmos (bool currentlySelected)
+	#if UNITY_EDITOR
+	void LateUpdate()
 	{
-		if (this.onlyWhenSelected && !currentlySelected) {
+		if (EditorApplication.isPlayingOrWillChangePlaymode) {
+			this.enabled = false;
 			return;
 		}
 
@@ -120,7 +123,15 @@ public class CameraGizmos : MonoBehaviour
 			this.cam = GetComponent<Camera> ();
 		}
 
-		if  (!this.cam.gameObject.activeSelf || !this.cam.isActiveAndEnabled || this.height < 1) {
+		if (height > 0 && (this.cam.aspect != (float)width / (float)height)) {
+			this.cam.aspect = (float)width / (float)height;
+		}
+		projectedPoints = computeViewpointPoints (projectionQuality);
+	}
+	#endif
+	protected void DrawAllGizmos (bool currentlySelected)
+	{
+		if (this.onlyWhenSelected && !currentlySelected) {
 			return;
 		}
 
