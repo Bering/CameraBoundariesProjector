@@ -126,17 +126,20 @@ public class CameraGizmos : MonoBehaviour
 		if (height > 0 && (this.cam.aspect != (float)width / (float)height)) {
 			this.cam.aspect = (float)width / (float)height;
 		}
+
 		projectedPoints = computeViewpointPoints (projectionQuality);
 	}
 	#endif
+
+
 	protected void DrawAllGizmos (bool currentlySelected)
 	{
 		if (this.onlyWhenSelected && !currentlySelected) {
 			return;
 		}
 
-		if (this.cam.aspect != (float)width / (float)height) {
-			this.cam.aspect = (float)width / (float)height;
+		if  (!this.cam.gameObject.activeSelf || !this.cam.isActiveAndEnabled) {
+			return;
 		}
 
 		if (this.drawFrustrum) {

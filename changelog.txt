@@ -1,6 +1,8 @@
+2.1
 - Fixed #4 by projecting in LateUpdate() so the projection will be adjusted when you move scene objects around
 
 2.0 Major redesign!
+
 - Now only does one GameViewSize per script. If you want more sizes, add more scripts.
 - No Inspector Script anymore
 - No need to create a collider and link to it. The projection will hit all colliders and only show the closest hits.
@@ -10,5 +12,4 @@
 - Added a few scenes to showcase the features
 - You can now choose the color of the lines
 
-1.0
-- Initial release
+1.0 Initial release
