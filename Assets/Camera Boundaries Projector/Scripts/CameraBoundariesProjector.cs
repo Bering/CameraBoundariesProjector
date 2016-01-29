@@ -111,11 +111,9 @@ public class CameraBoundariesProjector : MonoBehaviour
 	}
 
 
-	#if UNITY_EDITOR
-	void LateUpdate()
+	protected void DrawAllGizmos (bool currentlySelected)
 	{
-		if (EditorApplication.isPlayingOrWillChangePlaymode) {
-			this.enabled = false;
+		if (this.onlyWhenSelected && !currentlySelected) {
 			return;
 		}
 
@@ -123,32 +121,19 @@ public class CameraBoundariesProjector : MonoBehaviour
 			this.cam = GetComponent<Camera> ();
 		}
 
-		if (height > 0 && (this.cam.aspect != (float)width / (float)height)) {
-			this.cam.aspect = (float)width / (float)height;
-		}
-
-		projectedPoints = computeViewpointPoints (projectionQuality);
-	}
-	#endif
-
-
-	protected void DrawAllGizmos (bool currentlySelected)
-	{
-		if (this.onlyWhenSelected && !currentlySelected) {
-			return;
-		}
-
 		if  (!this.cam.gameObject.activeSelf || !this.cam.isActiveAndEnabled) {
 			return;
+		}
+
+		if (height > 0 && (this.cam.aspect != (float)width / (float)height)) {
+			this.cam.aspect = (float)width / (float)height;
 		}
 
 		if (this.drawFrustrum) {
 			this.DrawFrustrum ();
 		}
 
-		if (currentlySelected || projectedPoints == null || projectedPoints.Length != (projectionQuality*4)) {
-			projectedPoints = computeViewpointPoints (projectionQuality);
-		}
+		this.projectedPoints = computeViewpointPoints (this.projectionQuality);
 
 		this.DrawProjection ();
 
