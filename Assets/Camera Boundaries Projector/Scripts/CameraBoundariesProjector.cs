@@ -6,7 +6,7 @@ using UnityEngine.Assertions;
 [ExecuteInEditMode]
 [System.Serializable]
 [RequireComponent(typeof(Camera))]
-public class CameraGizmos : MonoBehaviour
+public class CameraBoundariesProjector : MonoBehaviour
 {
 	public string displayText;
 	public int width;
