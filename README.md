@@ -1,5 +1,4 @@
-# Camera-Plane
-Script that adds gizmos to cameras in Unity
+# Camera Boundaries Projector
 
 ##Overview
 This script projects the boundaries of the FOV of a camera and shows gizmos so you can see what is visible and what isn't. You can put many scripts on the same camera, each with a different aspect ratio so it is great for seeing what phones, tablets and different PC screen sizes will see.
