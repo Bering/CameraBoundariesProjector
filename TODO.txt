@@ -1,11 +1,11 @@
 TODO:
-- Changer le nom, ça n'a plus rapport pantoute LOL
-- Editer les screenshots et/ou le readme pour pointer et expliquer les features et avantages, question d'être vraiment explicite.
-  * Démontrer que les trous dans la projection ça veut dire que tu vois le background de la caméra
-  * Démontrer que rouge c'est l'axe des X et que vert c'est l'axe des Y
-  * Démontrer la projection quality
-  * Démontrer le OnlyWhenSelected
+- Edit the screenshots and/or the readme to point out and explain the features and advantages:
+  * Show that the holes in the projection lines mean that you'll see the camera's background
+  * Show that the red is for the X axis and the green for the Y
+  * Explain the projection quality
+  * Explain OnlyWhenSelected
+  * Recommend turning the stock camera Gizmos off
   * etc...
-- Créer un readme.pdf de quelques lignes avec le lien vers GitHub et les instructions pour l'utilisation.
-- Publier le readme.pdf dans le bundle lui-même
-- Publier tout ça sur le assets store
+- Make a readme.pdf with links to GitHub and basic installation instructions
+- Move the readme.pdf into the bundle
+- Publish to the Assets Store
