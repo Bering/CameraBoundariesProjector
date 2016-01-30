@@ -1,3 +1,7 @@
+2.2
+- Renamed to Camera Boundaries Projector
+- Fixed the fix... Oops :-/
+
 2.1
 - Fixed #4 by projecting in LateUpdate() so the projection will be adjusted when you move scene objects around
 
